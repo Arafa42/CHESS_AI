@@ -8,7 +8,7 @@ if __name__ == "__main__":
     # Create your utility
     utility = ExampleUtility()
     # Create your agent
-    agent = ExampleAgent(utility, 5.0)
+    agent = ExampleAgent(utility, 15.0)
     # Create the engine
     engine = UciEngine("Example engine", "Arne", agent)
     # Run the engine (will loop until the game is done or exited)
