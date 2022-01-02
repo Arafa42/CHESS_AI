@@ -1,13 +1,12 @@
 from abc import ABC
 import chess
 import time
+import os
 import chess.polyglot
 from project.chess_utilities.utility import Utility
 from project.chess_utilities.tables import *
 
 """A generic agent class"""
-
-
 class Agent(ABC):
 
     def __init__(self, utility: Utility, time_limit_move: float) -> None:
@@ -122,7 +121,8 @@ class Agent(ABC):
         print("SIGMA AI IS THINKING HARD...")
 
         try:
-            move = chess.polyglot.MemoryMappedReader("C:/Users/arafa/OneDrive/Bureaublad/human.bin").weighted_choice(board).move
+            dirpath = os.path.dirname(__file__).split("\project")[0] + "\\Humans\\human.bin"
+            move = chess.polyglot.MemoryMappedReader(dirpath).weighted_choice(board).move
             return move
 
         except:

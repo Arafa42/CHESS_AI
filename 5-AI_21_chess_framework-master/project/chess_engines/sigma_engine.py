@@ -10,6 +10,6 @@ if __name__ == "__main__":
     # Create your agent
     agent = Agent(utility, 15.0)
     # Create the engine
-    engine = UciEngine("Sigma engine", "Arafa, Usman & Vlods mom", agent)
+    engine = UciEngine("Sigma engine", "Arafa, Usmans mom & Vlad", agent)
     # Run the engine (will loop until the game is done or exited)
     engine.engine_operation()
