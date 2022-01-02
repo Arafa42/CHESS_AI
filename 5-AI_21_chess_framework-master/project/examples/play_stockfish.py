@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from project.chess_utilities.example_utility import ExampleUtility
-from project.chess_agents.example_agent import ExampleAgent
+from project.chess_utilities.utility import Utility
+from project.chess_agents.agent import Agent
 import chess
 import chess.engine
 import chess.pgn
@@ -13,9 +13,9 @@ def play_stockfish():
     # Setup
     board = chess.Board()
     # Define agent here
-    white_player = ExampleAgent(ExampleUtility(), 5.0)
+    white_player = Agent(Utility(), 15.0)
     # Enter your path here:
-    black_player = chess.engine.SimpleEngine.popen_uci("C:/Users/ATroch/Documents/stockfish/stockfish.exe")
+    black_player = chess.engine.SimpleEngine.popen_uci("C:\\Users\\usman\\Documents\\UA\\AI CHESS\\CHESS_AI\\5-AI_21_chess_framework-master\\Stockfish\\stockfish_14.1_win_x64_avx2.exe")
     # Determine the skill level of Stockfish:
     black_player.configure({"Skill Level": 1})
     limit = chess.engine.Limit(time=time_limit)
