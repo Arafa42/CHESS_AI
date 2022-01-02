@@ -9,17 +9,18 @@ import os
 """ An agent plays a game against the stockfish engine """
 def play_stockfish():
     
-    time_limit = 5.0
-        
+    time_limit = 1.0
+    game = chess.pgn.Game()
+
     # Setup
     board = chess.Board()
     # Define agent here
-    white_player = Agent(Utility(), 15.0)
+    black_player = Agent(Utility(), 15.0)
     # Enter your path here:
-    dirpath = os.path.dirname(__file__).split("\project")[0] + "\\Stockfish\\stockfish_14.1_win_x64_avx2.exe"
-    black_player = chess.engine.SimpleEngine.popen_uci(dirpath)
+    dirpath = "C:\\Users\\arafa\\OneDrive\\Bureaublad\\stockfish_14.1_win_x64_popcnt\\stockfish_14.1_win_x64_popcnt.exe"
+    white_player = chess.engine.SimpleEngine.popen_uci(dirpath)
     # Determine the skill level of Stockfish:
-    black_player.configure({"Skill Level": 1})
+    white_player.configure({"Skill Level": 1})
     limit = chess.engine.Limit(time=time_limit)
 
     running = True
@@ -31,12 +32,12 @@ def play_stockfish():
 
         if turn_white_player:
             # White plays a random move
-            move = white_player.calculate_move(board)
+            move = white_player.play(board, limit).move
             turn_white_player = False
             print("White plays")
         else:
             # Stockfish plays a move
-            move = black_player.play(board, limit).move
+            move = black_player.calculate_move(board, 4)
             turn_white_player = True
             print("Black plays")
 
