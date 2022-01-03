@@ -11,7 +11,7 @@ def play_stockfish():
     
     time_limit = 5.0
         
-    # Setup
+    # Setupp
     board = chess.Board()
     # Define agent here
     white_player = Agent(Utility(), 15.0)
