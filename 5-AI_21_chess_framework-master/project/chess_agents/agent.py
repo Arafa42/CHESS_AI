@@ -1,6 +1,9 @@
 from abc import ABC
 import chess
 import time
+import os
+import chess.polyglot
+import chess.s
 from project.chess_utilities.utility import Utility
 
 """A generic agent class"""
@@ -12,25 +15,6 @@ class Agent(ABC):
         """Setup the Search Agent"""
         self.utility = utility
         self.time_limit_move = time_limit_move
-
-    def calculate_move(self, board: chess.Board, depth=3):
-        start_time = time.time()
-        bestMove = chess.Move.null()
-        bestValue = -99999
-        alpha = -100000
-        beta = 100000
-        for move in board.legal_moves:
-            if time.time() - start_time > self.time_limit_move:
-                break
-            board.push(move)
-            boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
-            if boardValue > bestValue:
-                bestValue = boardValue;
-                bestMove = move
-            if (boardValue > alpha):
-                alpha = boardValue
-            board.pop()
-        return bestMove
 
     def alphabeta(self, board: chess.Board, alpha, beta, depthleft):
         bestscore = -9999
@@ -66,3 +50,28 @@ class Agent(ABC):
                 if (score > alpha):
                     alpha = score
         return alpha
+
+    def calculate_move(self, board: chess.Board, depth=3):
+        start_time = time.time()
+        try:
+            dirpath = os.path.dirname(__file__).split("\project")[0] + "\\humans\\human.bin"
+            move = chess.polyglot.MemoryMappedReader(dirpath).weighted_choice(board).move
+            print("OPENING BOOOK..................")
+            return move
+        except:
+            bestMove = chess.Move.null()
+            bestValue = -99999
+            alpha = -100000
+            beta = 100000
+            for move in board.legal_moves:
+                if time.time() - start_time > self.time_limit_move:
+                    break
+                board.push(move)
+                boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
+                if boardValue > bestValue:
+                    bestValue = boardValue;
+                    bestMove = move
+                if (boardValue > alpha):
+                    alpha = boardValue
+                board.pop()
+            return bestMove
