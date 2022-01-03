@@ -1,10 +1,14 @@
 from abc import ABC
+from sys import flags
+
 import chess
 import time
 import os
 import chess.polyglot
-import chess.s
+import chess.syzygy
 from project.chess_utilities.utility import Utility
+import re
+
 
 """A generic agent class"""
 
@@ -51,27 +55,65 @@ class Agent(ABC):
                     alpha = score
         return alpha
 
-    def calculate_move(self, board: chess.Board, depth=3):
+    def calculate_move(self, board: chess.Board, depth=2):
         start_time = time.time()
         try:
-            dirpath = os.path.dirname(__file__).split("\project")[0] + "\\humans\\human.bin"
+            dirpath = os.path.dirname(__file__).split("\project")[0] + "\\humans\\elo-3300.bin"
             move = chess.polyglot.MemoryMappedReader(dirpath).weighted_choice(board).move
             print("OPENING BOOOK..................")
             return move
         except:
-            bestMove = chess.Move.null()
-            bestValue = -99999
-            alpha = -100000
-            beta = 100000
-            for move in board.legal_moves:
-                if time.time() - start_time > self.time_limit_move:
-                    break
-                board.push(move)
-                boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
-                if boardValue > bestValue:
-                    bestValue = boardValue;
-                    bestMove = move
-                if (boardValue > alpha):
-                    alpha = boardValue
-                board.pop()
-            return bestMove
+                if(self.checkCurrentPieceCount(board) <= 5):
+                    try:
+                        with chess.syzygy.open_tablebase("data/syzygy") as tablebase:
+                            board = chess.Board("8/2K5/4B3/3N4/8/8/4k3/8 b - - 0 1")
+                            print("END TABLE BASE........")
+                            bestMove = chess.Move.null()
+                            bestValue = -99999
+                            alpha = -100000
+                            beta = 100000
+
+                            # print(tablebase.probe_wdl(board))
+                            for move in board.legal_moves:
+                                if time.time() - start_time > self.time_limit_move:
+                                    break
+                                board.push(move)
+                                boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
+                                if boardValue > bestValue:
+                                    bestValue = boardValue;
+                                    bestMove = move
+                                if (boardValue > alpha):
+                                    alpha = boardValue
+                                board.pop()
+                            return bestMove
+                    except:
+                        bestMove = chess.Move.null()
+                        bestValue = -99999
+                        alpha = -100000
+                        beta = 100000
+
+                        # print(tablebase.probe_wdl(board))
+                        for move in board.legal_moves:
+                            if time.time() - start_time > self.time_limit_move:
+                                break
+                            board.push(move)
+                            boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
+                            if boardValue > bestValue:
+                                bestValue = boardValue;
+                                bestMove = move
+                            if (boardValue > alpha):
+                                alpha = boardValue
+                            board.pop()
+                        return bestMove
+
+
+
+    def checkCurrentPieceCount(self,board:chess.Board):
+        boardNew = str(board)
+        alphabets = 0
+
+        for i in range(len(boardNew)):
+            if (boardNew[i].isalpha()):
+                alphabets = alphabets + 1
+
+        return alphabets
