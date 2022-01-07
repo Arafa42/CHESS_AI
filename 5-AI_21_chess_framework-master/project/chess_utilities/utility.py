@@ -8,7 +8,7 @@ class Utility(ABC):
     def board_value(self, board: chess.Board):
         if board.is_checkmate():
             if board.turn:
-                #return very low number when check mate on our turn
+                # Return very low number when check mate on our turn
                 return -9999
             else:
                 # return very high number when check mate on not our turn
@@ -18,31 +18,31 @@ class Utility(ABC):
         if board.is_insufficient_material():
             return 0
 
-        #White pieces
+        # White pieces
         white_pawn = len(board.pieces(chess.PAWN, chess.WHITE))
         white_knight = len(board.pieces(chess.KNIGHT, chess.WHITE))
         white_bishop = len(board.pieces(chess.BISHOP, chess.WHITE))
         white_rook = len(board.pieces(chess.ROOK, chess.WHITE))
         white_queen = len(board.pieces(chess.QUEEN, chess.WHITE))
 
-        #Black pieces
+        # Black pieces
         black_pawn = len(board.pieces(chess.PAWN, chess.BLACK))
         black_knight = len(board.pieces(chess.KNIGHT, chess.BLACK))
         black_bishop = len(board.pieces(chess.BISHOP, chess.BLACK))
         black_rook = len(board.pieces(chess.ROOK, chess.BLACK))
         black_queen = len(board.pieces(chess.QUEEN, chess.BLACK))
 
-        #define piece value for each piece
-        #source: https://en.wikipedia.org/wiki/Chess_piece_relative_value
-        #Used here: AlphaZero, reason: most recent.
+        # Define piece value for each piece
+        # Source: https://en.wikipedia.org/wiki/Chess_piece_relative_value
+        # Used here: AlphaZero, reason: most recent.
         pawn_value = 100
         knight_value = 305
         bishop_value = 333
         rook_value = 501
         queen_value = 880
 
-        #Board evaluations for each piece in tables
-        #source: https://www.chessprogramming.org/index.php?title=Simplified_Evaluation_Function&mobileaction=toggle_view_desktop
+        # Board evaluations for each piece in tables
+        # Source: https://www.chessprogramming.org/index.php?title=Simplified_Evaluation_Function&mobileaction=toggle_view_desktop
         pawntable = [
             0,   0,    0,    0,   0,   0,   0,   0,
             5,  10,   10,  -20, -20,  10,  10,   5,
@@ -109,15 +109,15 @@ class Utility(ABC):
             -30, -40, -40, -50, -50, -40, -40, -30
         ]
 
-        #Estimate board_value by substracting white_value by black_value and multiply by our AplhaZero value
+        # Estimate board_value by subtracting white_value by black_value and multiply by our AplhaZero value
         board_value = pawn_value * (white_pawn - black_pawn) + knight_value * (white_knight - black_knight) \
                    + bishop_value * (white_bishop - black_bishop) + rook_value * (white_rook - black_rook) \
                    + queen_value * (white_queen - black_queen)
 
         pawnsq = getsqwhite(board, pawntable, chess.PAWN)
         pawnsq = pawnsq + getsqblack(board, pawntable, chess.PAWN)
-        knightsq = getsqwhite(board, kingstable, chess.KNIGHT)
-        knightsq = knightsq + getsqblack(board, kingstable, chess.KNIGHT)
+        knightsq = getsqwhite(board, knightstable, chess.KNIGHT)
+        knightsq = knightsq + getsqblack(board, knightstable, chess.KNIGHT)
         bishopsq = getsqwhite(board, bishopstable, chess.BISHOP)
         bishopsq = bishopsq + getsqblack(board, bishopstable, chess.BISHOP)
         rooksq = getsqwhite(board, rookstable, chess.ROOK)
