@@ -1,1 +1,1 @@
-conda activate chess_AI & python -m project.chess_engines.example_engine
+conda activate chess_AI & python -m project.chess_engines.sigma_engine

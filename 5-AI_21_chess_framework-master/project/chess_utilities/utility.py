@@ -133,7 +133,6 @@ class Utility(ABC):
         else:
             return -value
 
-
 def getsqwhite(board: chess.Board, table, chesspiece):
     return sum([table[i] for i in board.pieces(chesspiece, chess.WHITE)])
 
