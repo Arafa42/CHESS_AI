@@ -63,48 +63,25 @@ class Agent(ABC):
             print("OPENING BOOOK..................")
             return move
         except:
-                if(self.checkCurrentPieceCount(board) <= 5):
-                    try:
-                        with chess.syzygy.open_tablebase("data/syzygy") as tablebase:
-                            #board = chess.Board("8/2K5/4B3/3N4/8/8/4k3/8 b - - 0 1")
-                            print("END TABLE BASE........")
-                            bestMove = chess.Move.null()
-                            bestValue = -99999
-                            alpha = -100000
-                            beta = 100000
+            bestMove = chess.Move.null()
+            bestValue = -99999
+            alpha = -100000
+            beta = 100000
 
-                            # print(tablebase.probe_wdl(board))
-                            for move in board.legal_moves:
-                                if time.time() - start_time > self.time_limit_move:
-                                    break
-                                board.push(move)
-                                boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
-                                if boardValue > bestValue:
-                                    bestValue = boardValue;
-                                    bestMove = move
-                                if (boardValue > alpha):
-                                    alpha = boardValue
-                                board.pop()
-                            return bestMove
-                    except:
-                        bestMove = chess.Move.null()
-                        bestValue = -99999
-                        alpha = -100000
-                        beta = 100000
-
-                        # print(tablebase.probe_wdl(board))
-                        for move in board.legal_moves:
-                            if time.time() - start_time > self.time_limit_move:
-                                break
-                            board.push(move)
-                            boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
-                            if boardValue > bestValue:
-                                bestValue = boardValue;
-                                bestMove = move
-                            if (boardValue > alpha):
-                                alpha = boardValue
-                            board.pop()
-                        return bestMove
+            # print(tablebase.probe_wdl(board))
+            for move in board.legal_moves:
+                if time.time() - start_time > self.time_limit_move:
+                    print("time :", time.time()-start_time)
+                    break
+                board.push(move)
+                boardValue = -self.alphabeta(board, -beta, -alpha, depth - 1)
+                if boardValue > bestValue:
+                    bestValue = boardValue;
+                    bestMove = move
+                if (boardValue > alpha):
+                    alpha = boardValue
+                board.pop()
+            return bestMove
 
 
 
