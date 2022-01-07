@@ -66,7 +66,7 @@ class Agent(ABC):
                 if(self.checkCurrentPieceCount(board) <= 5):
                     try:
                         with chess.syzygy.open_tablebase("data/syzygy") as tablebase:
-                            board = chess.Board("8/2K5/4B3/3N4/8/8/4k3/8 b - - 0 1")
+                            #board = chess.Board("8/2K5/4B3/3N4/8/8/4k3/8 b - - 0 1")
                             print("END TABLE BASE........")
                             bestMove = chess.Move.null()
                             bestValue = -99999
