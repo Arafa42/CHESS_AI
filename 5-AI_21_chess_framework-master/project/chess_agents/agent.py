@@ -55,7 +55,7 @@ class Agent(ABC):
                     alpha = score
         return alpha
 
-    def calculate_move(self, board: chess.Board, depth=2):
+    def calculate_move(self, board: chess.Board, depth=3):
         start_time = time.time()
         try:
             dirpath = os.path.dirname(__file__).split("\project")[0] + "\\humans\\elo-3300.bin"
